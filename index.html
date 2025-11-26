@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Maturity Radar</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    /* Global Styles */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: "Century Gothic", Arial, sans-serif;
+      background-color: #ffffff;
+      color: #3b0030;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header with Logo */
+    header {
+      display: flex;
+      align-items: center;
+      padding: 20px 40px;
+      box-sizing: border-box;
+    }
+
+    header img {
+      height: 50px;
+      margin-right: 20px;
+    }
+
+    /* Main container: vertically center content */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center; /* vertical centering */
+      width: 100%;
+      text-align: center;
+    }
+
+    .titles h1 {
+      margin: 0;
+      font-size: 2em;
+    }
+
+    .titles h2 {
+      margin: 5px 0 30px 0;
+      font-size: 1.2em;
+      font-weight: normal;
+      color: #555555;
+    }
+
+    /* Chart container */
+    .chart-container {
+      width: 500px;
+      max-width: 90%;
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    canvas {
+      width: 100% !important;
+      height: auto !important;
+    }
+
+    /* Optional footer */
+    footer {
+      text-align: center;
+      padding: 15px 0;
+      color: #777777;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header with Logo -->
+  <header>
+    <img src="https://yourcompany.com/logo.png" alt="Company Logo">
+  </header>
+
+  <!-- Main Content: Vertically Centered -->
+  <main>
+    <div class="titles">
+      <h1>Your AI Maturity</h1>
+      <h2>Here are your results across 9 dimensions</h2>
+    </div>
+
+    <div class="chart-container">
+      <canvas id="radarChart"></canvas>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2025 Your Company Name
+  </footer>
+
+  <script>
+    // Mapping numbers to descriptive levels
+    const levelLabels = {
+      1: "L1 – Minimal/No AI",
+      2: "L2 – Emerging/Basic",
+      3: "L3 – Comprehensive/Integrated",
+      4: "L4 – Transformational/Strategic"
+    };
+
+    // Read URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+
+    function getValue(param) {
+      const val = parseInt(urlParams.get(param));
+      return val ? val : 0;
+    }
+
+    // Read all variables
+    const strategy = getValue('strategy');
+    const implementation = getValue('implementation');
+    const benefits = getValue('benefits');
+    const change = getValue('change');
+    const leadership = getValue('leadership');
+    const data = getValue('data');
+    const partners = getValue('partners');
+    const lifecycle = getValue('lifecycle');
+    const talent = getValue('talent');
+
+    // Prepare chart data
+    const radarData = {
+      labels: ['Strategy','Implementation','Benefits','Change','Leadership','Data','Partners','Lifecycle','Talent'],
+      datasets: [{
+        label: '', // No legend text
+        data: [strategy, implementation, benefits, change, leadership, data, partners, lifecycle, talent],
+        backgroundColor: 'rgba(59, 0, 48, 0.3)', // lighter shaded area
+        borderColor: '#3b0030',
+        borderWidth: 2,
+        pointBackgroundColor: '#3b0030',
+        pointBorderColor: '#ffffff',
+        pointRadius: 6,
+        pointHoverRadius: 8
+      }]
+    };
+
+    // Create the radar chart
+    const ctx = document.getElementById('radarChart').getContext('2d');
+    const radarChart = new Chart(ctx, {
+      type: 'radar',
+      data: radarData,
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        scales: {
+          r: {
+            min: 0,
+            max: 4,
+            ticks: {
+              stepSize: 1,
+              color: '#3b0030',
+              backdropColor: 'transparent'
+            },
+            pointLabels: {
+              color: '#3b0030',
+              font: {
+                family: "Century Gothic",
+                size: 14
+              }
+            },
+            grid: { color: '#ddd' },
+            angleLines: { color: '#ddd' }
+          }
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const val = context.raw;
+                const desc = levelLabels[val] || 'No data';
+                return `Score: ${val} → ${desc}`;
+              }
+            }
+          }
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>
