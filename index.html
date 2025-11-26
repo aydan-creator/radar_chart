@@ -82,7 +82,7 @@
 
   <!-- Header with Logo -->
   <header>
-    <img src="https://drive.google.com/file/d/1-7rSkN8pwrgLz7FeJzHe9zHMqkTMAXo7/view?usp=drive_link" alt="Company Logo">
+    <img src="https://yourcompany.com/logo.png" alt="Your Company Name Logo">
   </header>
 
   <!-- Main Content: Vertically Centered -->
@@ -98,7 +98,7 @@
   </main>
 
   <footer>
-    &copy; 2025 Evinova x Impatient Health
+    &copy; 2025 Your Company Name
   </footer>
 
   <script>
@@ -118,23 +118,43 @@
       return val ? val : 0;
     }
 
-    // Read all variables
-    const strategy = getValue('strategy');
+    // Read all variables from Typeform
     const implementation = getValue('implementation');
-    const benefits = getValue('benefits');
-    const change = getValue('change');
-    const leadership = getValue('leadership');
-    const data = getValue('data');
-    const partners = getValue('partners');
-    const lifecycle = getValue('lifecycle');
-    const talent = getValue('talent');
+    const strategy = getValue('strategy');
+    const benefits_realisation = getValue('benefits_realisation');
+    const change_management = getValue('change_management');
+    const data_availability_integration = getValue('data_availability_integration');
+    const partner_strategy = getValue('partner_strategy');
+    const lifecycle_management = getValue('lifecycle_management');
+    const talent_technology_readiness = getValue('talent_technology_readiness');
+    const leadership_governance = getValue('leadership_governance');
 
     // Prepare chart data
     const radarData = {
-      labels: ['Strategy','Implementation','Benefits','Change','Leadership','Data','Partners','Lifecycle','Talent'],
+      labels: [
+        'Implementation',
+        'Strategy',
+        'Benefits Realisation',
+        'Change Management',
+        'Data Availability & Integration',
+        'Partner Strategy',
+        'Lifecycle Management',
+        'Talent & Technology',
+        'Leadership & Governance'
+      ],
       datasets: [{
-        label: '', // No legend text
-        data: [strategy, implementation, benefits, change, leadership, data, partners, lifecycle, talent],
+        label: '', // no legend
+        data: [
+          implementation,
+          strategy,
+          benefits_realisation,
+          change_management,
+          data_availability_integration,
+          partner_strategy,
+          lifecycle_management,
+          talent_technology_readiness,
+          leadership_governance
+        ],
         backgroundColor: 'rgba(59, 0, 48, 0.3)', // lighter shaded area
         borderColor: '#3b0030',
         borderWidth: 2,
