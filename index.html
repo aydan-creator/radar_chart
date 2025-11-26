@@ -1,91 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Your AI Maturity | Evinova x Impatient Health</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Your AI Maturity</title>
+
+<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Century Gothic -->
+<link href="https://fonts.googleapis.com/css2?family=Century+Gothic:wght@400;700&display=swap" rel="stylesheet" />
 
 <style>
   body {
-    margin: 0;
-    padding: 0;
-    background: #ffffff;
     font-family: "Century Gothic", sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    background: #ffffff;
+    margin: 0;
+    padding: 40px;
+    text-align: center;
+    color: #3b0030;
   }
 
   header {
-    width: 100%;
-    padding: 20px;
-    box-sizing: border-box;
+    text-align: left;
+    margin-bottom: 20px;
   }
 
   header img {
-    height: 55px;
+    height: 60px;
   }
 
   h1 {
-    font-size: 28px;
-    text-align: center;
-    color: #3b0030;
-    margin: 10px 0 0;
+    font-size: 32px;
+    margin-top: 10px;
   }
 
   h2 {
-    font-size: 16px;
-    text-align: center;
-    color: #3b0030;
-    font-weight: lighter;
-    margin-bottom: 25px;
+    font-size: 18px;
+    font-weight: normal;
+    margin-bottom: 20px;
   }
 
-  /* Card that holds the chart */
   .card {
-    background: white;
-    padding: 40px;
-    border-radius: 16px;
-    max-width: 850px;
-    width: 90%;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    box-sizing: border-box;
-    display: flex;
-    justify-content: center;
+    background: #ffffff;
+    border-radius: 14px;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 30px;
+    box-shadow: 0px 4px 14px rgba(0,0,0,0.07);
   }
 
-  /* Larger chart */
   #chart-container {
-    width: 550px;
-    height: 550px;
+    width: 500px;
+    height: 500px;
+    margin: 0 auto;
   }
 
   footer {
-    margin-top: 40px;
-    margin-bottom: 20px;
-    font-size: 14px;
+    margin-top: 35px;
+    font-size: 12px;
     color: #3b0030;
-    opacity: 0.7;
+    opacity: 0.8;
   }
 
+  /* ---------------- MOBILE FIXES ---------------- */
   @media (max-width: 600px) {
-    header img { height: 48px; }
-    h1 { font-size: 22px; }
-    h2 { font-size: 14px; }
-    .card { padding: 20px; }
+    body {
+      padding: 10px;
+    }
+
+    header img {
+      height: 52px;
+    }
+
+    h1 {
+      font-size: 26px;
+    }
+
+    h2 {
+      font-size: 15px;
+    }
+
+    .card {
+      padding: 25px;
+      width: 100%;
+      max-width: 100%;
+      min-height: 420px;
+      border-radius: 14px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
     #chart-container {
-      width: 350px;
-      height: 350px;
+      width: 420px;
+      height: 420px;
+      margin: 0 auto;
     }
   }
 </style>
-</head>
 
+</head>
 <body>
 
+<!-- HEADER WITH LOGO -->
 <header>
-  <img src="https://drive.google.com/uc?export=view&id=1-7rSkN8pwrgLz7FeJzHe9zHMqkTMAXo7" 
-       alt="Evinova x Impatient Health Logo">
+  <img src="https://drive.google.com/uc?export=view&id=1-7rSkN8pwrgLz7FeJzHe9zHMqkTMAXo7" alt="Evinova x Impatient Health">
 </header>
 
 <h1>Your AI Maturity</h1>
@@ -102,7 +122,30 @@
 </footer>
 
 <script>
-// Mapping numbers to descriptive levels
+// --------------------------------------------------
+// 1. READ URL PARAMETERS
+// --------------------------------------------------
+const url = new URLSearchParams(window.location.search);
+
+function getVal(name) {
+  const v = parseInt(url.get(name));
+  return v ? v : 0;
+}
+
+// Extract variables EXACTLY matching your Typeform variable names
+const strategy = getVal("strategy");
+const implementation = getVal("implementation");
+const benefits = getVal("benefits_realisation");
+const change = getVal("change_management");
+const dataAI = getVal("data_availability_integration");
+const partners = getVal("partner_strategy");
+const lifecycle = getVal("lifecycle_management");
+const talent = getVal("talent_technology_readiness");
+const leadership = getVal("leadership_governance");
+
+// --------------------------------------------------
+// 2. LEVEL MAPPING (TOOLTIP TEXT)
+// --------------------------------------------------
 const levelLabels = {
   1: "L1 – Minimal/No AI",
   2: "L2 – Emerging/Basic",
@@ -110,79 +153,65 @@ const levelLabels = {
   4: "L4 – Transformational/Strategic"
 };
 
-// Read URL parameters
-const urlParams = new URLSearchParams(window.location.search);
-
-// Helper to safely read values
-function getValue(param) {
-  const val = parseInt(urlParams.get(param));
-  return val ? val : 0;
-}
-
-// Read Typeform variables
-const implementation = getValue("implementation");
-const strategy = getValue("strategy");
-const benefits = getValue("benefits_realisation");
-const change = getValue("change_management");
-const data = getValue("data_availability_integration");
-const partners = getValue("partner_strategy");
-const lifecycle = getValue("lifecycle_management");
-const talent = getValue("talent_technology_readiness");
-const leadership = getValue("leadership_governance");
-
-// Chart labels
-const labels = [
-  "Implementation",
-  "Strategy",
-  "Benefits Realisation",
-  "Change Management",
-  "Data Availability & Integration",
-  "Partner Strategy",
-  "Lifecycle Management",
-  "Talent & Technology",
-  "Leadership & Governance"
-];
-
-// Values
-const dataValues = [
-  implementation,
-  strategy,
-  benefits,
-  change,
-  data,
-  partners,
-  lifecycle,
-  talent,
-  leadership
-];
-
-// Create Radar Chart
+// --------------------------------------------------
+// 3. CREATE RADAR CHART
+// --------------------------------------------------
 const ctx = document.getElementById("radarChart").getContext("2d");
+
 new Chart(ctx, {
   type: "radar",
   data: {
-    labels: labels,
+    labels: [
+      "Strategy",
+      "Implementation",
+      "Benefits Realisation",
+      "Change Management",
+      "Data Availability & Integration",
+      "Partner Strategy",
+      "Lifecycle Management",
+      "Talent & Technology",
+      "Leadership & Governance"
+    ],
     datasets: [{
-      data: dataValues,
+      data: [
+        strategy,
+        implementation,
+        benefits,
+        change,
+        dataAI,
+        partners,
+        lifecycle,
+        talent,
+        leadership
+      ],
       backgroundColor: "rgba(59, 0, 48, 0.20)",
       borderColor: "#3b0030",
-      borderWidth: 3,
-      pointBackgroundColor: "#3b0030"
+      borderWidth: 2,
+      pointBackgroundColor: "#3b0030",
+      pointRadius: 4
     }]
   },
   options: {
     responsive: true,
-    plugins: { legend: { display: false }},
     scales: {
       r: {
         min: 0,
         max: 4,
-        ticks: { stepSize: 1, backdropColor: "transparent" },
-        pointLabels: {
-          font: { size: 12, family: "Century Gothic" },
-          color: "#3b0030"
-        },
-        grid: { color: "rgba(59,0,48,0.25)" }
+        ticks: { stepSize: 1, color: "#3b0030" },
+        grid: { color: "rgba(59,0,48,0.25)" },
+        angleLines: { color: "rgba(59,0,48,0.25)" },
+        pointLabels: { color: "#3b0030", font: { size: 14 } }
+      }
+    },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            const val = ctx.raw;
+            return `Score: ${val} → ${levelLabels[val] || "No data"}`;
+          }
+        }
       }
     }
   }
@@ -191,5 +220,6 @@ new Chart(ctx, {
 
 </body>
 </html>
+
 
 
