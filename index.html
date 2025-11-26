@@ -100,6 +100,7 @@
       max-width: 420px;          /* optional max width */
       height: auto !important;   /* maintain aspect ratio */
       margin: 0 auto;
+      padding: 20px;             /* extra space to avoid cutting labels */
     }
 
     canvas#radarChart {
@@ -167,6 +168,9 @@ const levelLabels = {
 // --------------------------------------------------
 const ctx = document.getElementById("radarChart").getContext("2d");
 
+// Detect if mobile to adjust label font size
+const isMobile = window.innerWidth <= 600;
+
 new Chart(ctx, {
   type: "radar",
   data: {
@@ -210,7 +214,7 @@ new Chart(ctx, {
         ticks: { stepSize: 1, color: "#3b0030" },
         grid: { color: "rgba(59,0,48,0.25)" },
         angleLines: { color: "rgba(59,0,48,0.25)" },
-        pointLabels: { color: "#3b0030", font: { size: 14 } }
+        pointLabels: { color: "#3b0030", font: { size: isMobile ? 10 : 14 } } // smaller labels on mobile
       }
     },
     plugins: {
@@ -230,7 +234,6 @@ new Chart(ctx, {
 
 </body>
 </html>
-
 
 
 
