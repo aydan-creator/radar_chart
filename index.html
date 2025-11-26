@@ -1,223 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Your AI Maturity</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Maturity Radar Chart</title>
 
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<!-- Century Gothic -->
-<link href="https://fonts.googleapis.com/css2?family=Century+Gothic:wght@400;700&display=swap" rel="stylesheet" />
-
-<style>
-  body {
-    font-family: "Century Gothic", sans-serif;
-    background: #ffffff;
-    margin: 0;
-    padding: 40px;
-    text-align: center;
-    color: #3b0030;
-  }
-
-  header {
-    text-align: left;
-    margin-bottom: 20px;
-  }
-
-  header img {
-    height: 60px;
-  }
-
-  h1 {
-    font-size: 32px;
-    margin-top: 10px;
-  }
-
-  h2 {
-    font-size: 18px;
-    font-weight: normal;
-    margin-bottom: 20px;
-  }
-
-  .card {
-    background: #ffffff;
-    border-radius: 14px;
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 30px;
-    box-shadow: 0px 4px 14px rgba(0,0,0,0.07);
-  }
-
-  #chart-container {
-    width: 500px;
-    height: 500px;
-    margin: 0 auto;
-  }
-
-  footer {
-    margin-top: 35px;
-    font-size: 12px;
-    color: #3b0030;
-    opacity: 0.8;
-  }
-
-  /* ---------------- MOBILE FIXES ---------------- */
-  @media (max-width: 600px) {
-    body {
-      padding: 10px;
+  <!-- Mobile-specific CSS -->
+  <style>
+    /* Logo styling */
+    #logo {
+      display: block;
+      margin: 20px auto; /* centers logo */
+      width: 38px;        /* 1/4 of previous size, adjust as needed */
     }
 
-    header img {
-      height: 52px;
-    }
+    /* Mobile adjustments */
+    @media only screen and (max-width: 600px) {
+      #radar-chart-container {
+        width: 100% !important;  /* full mobile width */
+        padding: 0 10px;         /* small padding */
+        overflow-x: hidden;      /* no horizontal scroll */
+      }
 
-    h1 {
-      font-size: 26px;
+      #radar-chart {
+        width: 100% !important;  /* chart scales to container */
+        height: auto !important; /* maintain aspect ratio */
+      }
     }
-
-    h2 {
-      font-size: 15px;
-    }
-
-    .card {
-      padding: 25px;
-      width: 100%;
-      max-width: 100%;
-      min-height: 420px;
-      border-radius: 14px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    #chart-container {
-      width: 420px;
-      height: 420px;
-      margin: 0 auto;
-    }
-  }
-</style>
-
+  </style>
 </head>
 <body>
 
-<!-- HEADER WITH LOGO -->
-<header>
-  <img src="logo.png" alt="Evinova x Impatient Health" width=38>
-</header>
+  <!-- Logo -->
+  <img id="logo" src="logo.png" alt="My Logo" width=38>
 
-<h1>Your AI Maturity</h1>
-<h2>Here are your results across 9 dimensions</h2>
-
-<div class="card">
-  <div id="chart-container">
-    <canvas id="radarChart"></canvas>
+  <!-- Radar chart container -->
+  <div id="radar-chart-container" style="width:500px; margin:0 auto;">
+    <canvas id="radar-chart"></canvas>
   </div>
-</div>
 
-<footer>
-  © 2025 Evinova x Impatient Health
-</footer>
+  <!-- Chart.js (your radar chart script) -->
+  <script src="radar-chart.js"></script>
+  <script>
+    const ctx = document.getElementById('radar-chart').getContext('2d');
 
-<script>
-// --------------------------------------------------
-// 1. READ URL PARAMETERS
-// --------------------------------------------------
-const url = new URLSearchParams(window.location.search);
+    const data = {
+      labels: ['Strategy','Implementation','Benefits Realisation','Change Management','Data Availability & Integration','Partner Strategy','Lifecycle Management','Talent & Technology Readiness','Leadership & Governance'],
+      datasets: [{
+        label: 'Your AI Maturity',
+        data: [
+          parseFloat(new URLSearchParams(window.location.search).get('strategy')) || 0,
+          parseFloat(new URLSearchParams(window.location.search).get('implementation')) || 0,
+          parseFloat(new URLSearchParams(window.location.search).get('benefits_realisation')) || 0,
+          parseFloat(new URLSearchParams(window.location.search).get('change_management')) || 0,
+          parseFloat(new URLSearchParams(window.location.search).get('data_availability_integration')) || 0,
+          parseFloat(new URLSearchParams(window.location.search).get('partner_strategy')) || 0,
+          parseFloat(new URLSearchParams(window.location.search).get('lifecycle_management')) || 0,
+          parseFloat(new URLSearchParams(window.location.search).get('talent_technology_readiness')) || 0,
+          parseFloat(new URLSearchParams(window.location.search).get('leadership_governance')) || 0
+        ],
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 2
+      }]
+    };
 
-function getVal(name) {
-  const v = parseInt(url.get(name));
-  return v ? v : 0;
-}
-
-// Extract variables EXACTLY matching your Typeform variable names
-const strategy = getVal("strategy");
-const implementation = getVal("implementation");
-const benefits = getVal("benefits_realisation");
-const change = getVal("change_management");
-const dataAI = getVal("data_availability_integration");
-const partners = getVal("partner_strategy");
-const lifecycle = getVal("lifecycle_management");
-const talent = getVal("talent_technology_readiness");
-const leadership = getVal("leadership_governance");
-
-// --------------------------------------------------
-// 2. LEVEL MAPPING (TOOLTIP TEXT)
-// --------------------------------------------------
-const levelLabels = {
-  1: "L1 – Minimal/No AI",
-  2: "L2 – Emerging/Basic",
-  3: "L3 – Comprehensive/Integrated",
-  4: "L4 – Transformational/Strategic"
-};
-
-// --------------------------------------------------
-// 3. CREATE RADAR CHART
-// --------------------------------------------------
-const ctx = document.getElementById("radarChart").getContext("2d");
-
-new Chart(ctx, {
-  type: "radar",
-  data: {
-    labels: [
-     ["Strategy"],
-  ["Implementation"],
-  ["Benefits", "Realisation"],
-  ["Change", "Management"],
-  ["Data Availability", "& Integration"],
-  ["Partner", "Strategy"],
-  ["Lifecycle", "Management"],
-  ["Talent", "& Technology"],
-  ["Leadership", "& Governance"]
-    ],
-    datasets: [{
-      data: [
-        strategy,
-        implementation,
-        benefits,
-        change,
-        dataAI,
-        partners,
-        lifecycle,
-        talent,
-        leadership
-      ],
-      backgroundColor: "rgba(59, 0, 48, 0.20)",
-      borderColor: "#3b0030",
-      borderWidth: 2,
-      pointBackgroundColor: "#3b0030",
-      pointRadius: 4
-    }]
-  },
-  options: {
-    responsive: true,
-    scales: {
-      r: {
-        min: 0,
-        max: 4,
-        ticks: { stepSize: 1, color: "#3b0030" },
-        grid: { color: "rgba(59,0,48,0.25)" },
-        angleLines: { color: "rgba(59,0,48,0.25)" },
-        pointLabels: { color: "#3b0030", font: { size: 14 } }
-      }
-    },
-    plugins: {
-      legend: { display: false },
-      tooltip: {
-        callbacks: {
-          label: function(ctx) {
-            const val = ctx.raw;
-            return `Score: ${val} → ${levelLabels[val] || "No data"}`;
-          }
+    const options = {
+      responsive: true,
+      maintainAspectRatio: true,
+      scales: {
+        r: {
+          beginAtZero: true,
+          suggestedMin: 0,
+          suggestedMax: 5
         }
+      },
+      plugins: {
+        legend: { position: 'top' }
       }
-    }
-  }
-});
-</script>
+    };
 
+    const myRadarChart = new Chart(ctx, {
+      type: 'radar',
+      data: data,
+      options: options
+    });
+  </script>
 </body>
 </html>
 
