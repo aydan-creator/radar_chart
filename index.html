@@ -37,7 +37,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center; /* vertical centering */
+      justify-content: center;
       width: 100%;
       text-align: center;
     }
@@ -69,12 +69,27 @@
       height: auto !important;
     }
 
-    /* Optional footer */
     footer {
       text-align: center;
       padding: 15px 0;
       color: #777777;
       font-size: 0.9em;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .chart-container {
+        width: 90%; /* make chart larger on mobile */
+        padding: 20px;
+      }
+
+      .titles h1 {
+        font-size: 1.8em;
+      }
+
+      .titles h2 {
+        font-size: 1em;
+      }
     }
   </style>
 </head>
@@ -82,7 +97,7 @@
 
   <!-- Header with Logo -->
   <header>
-    <img src="https://yourcompany.com/logo.png" alt="Your Company Name Logo">
+    <img src="https://drive.google.com/uc?export=view&id=1-7rSkN8pwrgLz7FeJzHe9zHMqkTMAXo7" alt="Your Company Name Logo">
   </header>
 
   <!-- Main Content: Vertically Centered -->
@@ -98,7 +113,7 @@
   </main>
 
   <footer>
-    &copy; 2025 Your Company Name
+    &copy; 2025 Evinova x Impatient Health
   </footer>
 
   <script>
@@ -180,13 +195,14 @@
             ticks: {
               stepSize: 1,
               color: '#3b0030',
-              backdropColor: 'transparent'
+              backdropColor: 'transparent',
+              font: { size: 12, family: "Century Gothic" } // smaller font
             },
             pointLabels: {
               color: '#3b0030',
               font: {
                 family: "Century Gothic",
-                size: 14
+                size: 12 // smaller label font
               }
             },
             grid: { color: '#ddd' },
